@@ -1,0 +1,21 @@
+#!/bin/sh
+
+if [ "$BASH_SOURCE" == "$0" ];then
+  BUNDLE=`echo "$0" | sed -e 's/\/Contents\/MacOS\/.*//'`
+else
+  BUNDLE=`echo "$BASH_SOURCE" | sed -e 's/\/Contents\/MacOS\/.*//'`
+fi
+RESOURCES=$BUNDLE/Contents/Resources
+
+echo "BUNDLE: $BUNDLE"
+echo "RESOURCES: $RESOURCES"
+
+VMTKHOME=$RESOURCES
+
+export PATH=$VMTKHOME/bin:$PATH
+export DYLD_LIBRARY_PATH=$VMTKHOME/lib/vtk-5.10:$VMTKHOME/lib/InsightToolkit:$VMTKHOME/lib/vmtk:$DYLD_LIBRARY_PATH
+export PYTHONPATH=$VMTKHOME/bin/Python:$VMTKHOME/lib/vtk-5.10:$VMTKHOME/lib/vmtk:$PYTHONPATH
+
+if [ "$BASH_SOURCE" == "$0" ];then
+  exec "/usr/bin/python" "$RESOURCES/bin/vmtk"
+fi
